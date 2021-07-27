@@ -9,6 +9,7 @@ import api from './utils/api'
 function App() {
   const [issues, setIssues] = useState({});
   const [columns, setColumns] = useState({});
+  const [isAddOpen, setIsAddOpen] = useState(false);
 
   useEffect(() => {
     const getIssues = async () => {
@@ -89,8 +90,8 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
-      <AddIssue onAdd={addIssue} />
+      <Header onAddButtonClick={() => setIsAddOpen(!isAddOpen)} isAddOpen={isAddOpen}/>
+      {isAddOpen && <AddIssue onAdd={addIssue} />}
       <div className='issues-container'>
         <DragDropContext onDragEnd={onDragEnd}>
           {Object.keys(columns).map((columnId) => {
@@ -100,6 +101,7 @@ function App() {
               <Column
                 key={column.id}
                 columnId={column.id}
+                title={column.title}
                 issues={columnIssues}
                 onDelete={deleteIssue}
               />

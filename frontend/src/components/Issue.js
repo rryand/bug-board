@@ -14,7 +14,7 @@ const Issue = ({ issue, index, onDelete }) => {
             <h3>{issue.title}</h3>
             <p>{issue.description}</p>
           </div>
-          <button className='delete-btn' onClick={() => onDelete(issue.id)}>
+          <button className='btn delete-btn' onClick={() => onDelete(issue.id)}>
             Delete
           </button>
         </div>

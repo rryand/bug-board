@@ -9,8 +9,10 @@ const AddIssue = ({ onAdd }) => {
 
     if (!title) {
       alert('Please add title.')
+      return;
     } else if (!description) {
       alert('Please add description.')
+      return;
     }
 
     onAdd({ title, description });
@@ -20,9 +22,9 @@ const AddIssue = ({ onAdd }) => {
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className='form' onSubmit={onSubmit}>
       <div className='form-control'>
-        <label>Title</label>
+        <label>Title:</label>
         <input
           type='text'
           placeholder='Add title'
@@ -31,7 +33,7 @@ const AddIssue = ({ onAdd }) => {
         />
       </div>
       <div className='form-control'>
-        <label>Description</label>
+        <label>Description:</label>
         <input
           type='text'
           placeholder='Add description'
@@ -39,7 +41,7 @@ const AddIssue = ({ onAdd }) => {
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
-      <input type='submit' value='Save Issue' />
+      <input className='btn submit-btn' type='submit' value='Save Issue' />
     </form>
   );
 }

@@ -6,8 +6,8 @@
 
 :root {
   --black: #121314;
-  --gray: #cccccc;
-  --dark-gray: #bbbbbb;
+  --gray: #d6d6d6;
+  --dark-gray: #c5c5c5;
   --white: white;
   --button-color: #0C2D48;
   --darker-button-color: #09263d;
@@ -25,10 +25,11 @@ body {
 header {
   display: flex;
   justify-content: space-between;
+  align-content: center;
   margin: 0 10px 20px 10px;
 }
 
-button {
+.btn {
   display: inline-block;
   background: var(--button-color);
   color: var(--white);
@@ -42,12 +43,20 @@ button {
   font-family: inherit;
 }
 
-button:active {
+.red {
+  background: var(--red);
+}
+
+.btn:active {
   transform: scale(0.95);
 }
 
-button:hover {
+.btn:hover {
   background: var(--darker-button-color);
+}
+
+.btn:hover.red {
+  background: var(--dark-red) !important;
 }
 
 .App {
@@ -92,4 +101,33 @@ button:hover {
 
 .delete-btn:hover {
   background: var(--dark-red);
+}
+
+.form {
+  border: 1px solid var(--dark-gray);
+  border-radius: 5px;
+  margin: 0 10px 20px 10px;
+  padding: 0 10px;
+  background-color: var(--gray);
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 ;
+}
+
+.form-control label {
+  margin-bottom: 0.2em;
+}
+
+.form-control input {
+  padding: 0.3em;
+  border: 1px solid var(--dark-gray);
+  border-radius: 5px;
+}
+
+.submit-btn {
+  display: block;
+  margin: 10px auto;
 }

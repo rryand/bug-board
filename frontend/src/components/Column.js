@@ -2,10 +2,10 @@ import { Droppable } from 'react-beautiful-dnd'
 
 import Issue from './Issue'
 
-const Column = ({ columnId, issues, onDelete }) => {
+const Column = ({ columnId, title, issues, onDelete }) => {
   return (
     <div className='column'>
-      <h2>{columnId}</h2>
+      <h2>{title}</h2>
       <Droppable droppableId={columnId}>
         {(provided) => (
           <div
