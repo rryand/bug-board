@@ -18,6 +18,7 @@ class Issue(IssueBase):
 
 class IssueStatus(BaseModel):
   id: str
+  title: str
   issueIds: List[int]
 
 class UpdateRequest(BaseModel):
