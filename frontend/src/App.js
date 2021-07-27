@@ -4,8 +4,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import AddIssue from './components/AddIssue';
 import Header from './components/Header'
 import Column from './components/Column'
-
-const API_URL = 'http://192.168.100.5:8000';
+import api from './utils/api'
 
 function App() {
   const [issues, setIssues] = useState({});
@@ -13,7 +12,7 @@ function App() {
 
   useEffect(() => {
     const getIssues = async () => {
-      const fetchedIssues = await fetchIssues();
+      const fetchedIssues = await api.get('/issues');
       const reducedIssues = fetchedIssues.reduce((obj, issue) => {
         obj[issue.id] = issue;
         return obj;
@@ -22,7 +21,7 @@ function App() {
     }
 
     const getColumns = async () => {
-      const fetchedColumns = await fetchColumns();
+      const fetchedColumns = await api.get('/statuses');
       const reducedColumns = fetchedColumns.reduce((obj, column) => {
         obj[column.id] = column;
         return obj;
@@ -34,23 +33,8 @@ function App() {
     getColumns();
   }, []);
 
-  // Fetch Issues
-  const fetchIssues = async () => {
-    const res = await fetch(`${API_URL}/issues`);
-    const data = await res.json();
-
-    return data;
-  };
-
   const addIssue = async (issue) => {
-    const res = await fetch(`${API_URL}/issues`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(issue),
-    });
-    const data = await res.json();
+    const data = await api.post('/issues', issue);
 
     setIssues({
       ...issues,
@@ -70,17 +54,9 @@ function App() {
 
   const deleteIssue = (id) => {
     setIssues(issues.filter((issue) => issue.id !== id));
-    // TODO: delete from column issueIds
-  };
+  }
 
-  const fetchColumns = async () => {
-    const res = await fetch(`${API_URL}/columns`);
-    const data = await res.json()
-
-    return data
-  };
-
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
 
     if (
@@ -100,7 +76,11 @@ function App() {
       ...column,
       issueIds: newIssueIds,
     };
-    
+
+    await api.patch(`/statuses/${source.droppableId}`, {
+      issueIds: newIssueIds
+    });
+
     setColumns({
       ...columns,
       [newColumn.id]: newColumn,
