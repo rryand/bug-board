@@ -22,4 +22,12 @@ def create_issue(db: Session, issue: schemas.IssueCreate):
   db.refresh(db_issue)
   return db_issue
 
+def get_issue_statuses(db: Session):
+  return db.query(models.IssueStatus).all()
 
+def get_issue_status(db: Session, issue_status_id: int):
+  return db.query(models.IssueStatus).filter(models.IssueStatus.id == issue_status_id).first()
+
+def update_issue_status(db: Session, issue_status_id: int, changes: dict):
+  db.query(models.IssueStatus).filter(models.IssueStatus.id == issue_status_id).update(changes)
+  db.commit()

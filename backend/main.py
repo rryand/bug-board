@@ -1,11 +1,13 @@
-from typing import List, Dict
+import json
+from typing import List
 
 from fastapi import FastAPI, HTTPException
 from fastapi.params import Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm.session import Session
 
-import crud, models, schemas
+import crud, models
+from schemas import Issue, IssueCreate, IssueStatus, UpdateRequest
 from database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
@@ -31,36 +33,53 @@ def get_db():
   finally:
     db.close()
 
-@app.get("/issues", response_model=List[schemas.Issue])
+@app.get("/issues", response_model=List[Issue])
 def get_issues(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
   issues = crud.get_issues(db=db, skip=skip, limit=limit)
+
   return issues
   
-@app.post("/issues", response_model=schemas.Issue)
-def post_issues(issue: schemas.IssueCreate, db: Session = Depends(get_db)):
-  return crud.create_issue(db=db, issue=issue)
+@app.post("/issues", response_model=Issue)
+def post_issues(issue: IssueCreate, db: Session = Depends(get_db)):
+  issue = crud.create_issue(db=db, issue=issue)
+  status = crud.get_issue_status(db=db, issue_status_id=issue.status)
 
-@app.get("/issues/{issue_id}", response_model=schemas.Issue)
+  new_issue_ids = json.loads(status.issueIds)
+  new_issue_ids.append(issue.id)
+
+  crud.update_issue_status(
+    db=db,
+    issue_status_id=issue.status,
+    changes= {"issueIds": json.dumps(new_issue_ids)})
+
+  return issue
+
+@app.get("/issues/{issue_id}", response_model=Issue)
 def get_issue(issue_id: int, db: Session = Depends(get_db)):
-  db_issue = crud.get_issue(db=db, issue_id=issue_id)
-  if db_issue is None:
+  issue = crud.get_issue(db=db, issue_id=issue_id)
+  if issue is None:
     raise HTTPException(404, detail="Issue not found")
-  return db_issue
 
-@app.patch("/issues/{issue_id}")
-def modify_issue(issue_id: int, body: Dict, db: Session = Depends(get_db)):
-  return {"message": "modified issue"}
+  return issue
 
-@app.get("/columns", response_model=List[schemas.Column])
+@app.patch("/statuses/{status_id}", response_model=IssueStatus)
+def modify_issue(status_id: str, body: UpdateRequest, db: Session = Depends(get_db)):
+  changes = {
+    "issueIds": json.dumps(body.issueIds),
+  }
+
+  crud.update_issue_status(db=db, issue_status_id=status_id, changes=changes)
+  status = crud.get_issue_status(db=db, issue_status_id=status_id)
+
+  return IssueStatus(**{**status.__dict__, "issueIds": json.loads(status.issueIds)})
+
+@app.get("/statuses", response_model=List[IssueStatus])
 def get_columns(db: Session = Depends(get_db)):
-  columns = []
-  for status in ["todo", "in-progress", "done"]:
-    column = {"id": status, "issueIds": []}
-    issues = crud.get_issues_by_type(db=db, type=status)
+  statuses = crud.get_issue_statuses(db=db)
 
-    for issue in issues:
-      column["issueIds"].append(issue.id)
-    
-    columns.append(column)
-
-  return columns
+  result = []
+  for status in statuses:
+    print(status.__dict__)
+    result.append(IssueStatus(**{**status.__dict__, "issueIds": json.loads(status.issueIds)}))
+  
+  return result

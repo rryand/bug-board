@@ -16,6 +16,9 @@ class Issue(IssueBase):
   class Config:
     orm_mode = True
 
-class Column(BaseModel):
+class IssueStatus(BaseModel):
   id: str
+  issueIds: List[int]
+
+class UpdateRequest(BaseModel):
   issueIds: List[int]
