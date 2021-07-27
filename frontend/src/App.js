@@ -91,7 +91,7 @@ function App() {
   return (
     <div className="App">
       <Header onAddButtonClick={() => setIsAddOpen(!isAddOpen)} isAddOpen={isAddOpen}/>
-      {isAddOpen && <AddIssue onAdd={addIssue} />}
+      <AddIssue onAdd={addIssue} isAddOpen={isAddOpen} />
       <div className='issues-container'>
         <DragDropContext onDragEnd={onDragEnd}>
           {Object.keys(columns).map((columnId) => {

@@ -3,7 +3,10 @@ import PropTypes from 'prop-types'
 const Header = ({ title, onAddButtonClick, isAddOpen }) => {
   return (
     <header>
-      <h1>{title}</h1>
+      <div>
+        <h1>{title}</h1>
+        <small>by <a className='name' href='#'>ryan</a></small>
+      </div>
       <button
         className={isAddOpen ? 'btn red' : 'btn'}
         onClick={onAddButtonClick}

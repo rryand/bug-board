@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,8 +8,8 @@
 
 :root {
   --black: #121314;
-  --gray: #d6d6d6;
-  --dark-gray: #c5c5c5;
+  --gray: #ebebeb;
+  --dark-gray: #e2e2e2;
   --white: white;
   --button-color: #0C2D48;
   --darker-button-color: #09263d;
@@ -17,16 +19,35 @@
 
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 header {
   display: flex;
   justify-content: space-between;
-  align-content: center;
+  align-items: center;
   margin: 0 10px 20px 10px;
+}
+
+h1 {
+  font-weight: 500;
+}
+
+h2 {
+  font-weight: 500;
+}
+
+small {
+  padding-left: 0.2rem;
+  letter-spacing: 0.1em;
+}
+
+.App {
+  max-width: 1000px;
+  height: 100vh;
+  margin: 10px auto;
+  padding: 10px;
+  color: var(--black);
 }
 
 .btn {
@@ -57,14 +78,6 @@ header {
 
 .btn:hover.red {
   background: var(--dark-red) !important;
-}
-
-.App {
-  max-width: 1000px;
-  max-height: 1000px;
-  margin: 10px auto;
-  padding: 10px;
-  color: var(--black);
 }
 
 .issues-container {
@@ -109,6 +122,9 @@ header {
   margin: 0 10px 20px 10px;
   padding: 0 10px;
   background-color: var(--gray);
+  max-height: 100%;
+  overflow: hidden;
+  transition: 1s ease-in;
 }
 
 .form-control {
@@ -130,4 +146,26 @@ header {
 .submit-btn {
   display: block;
   margin: 10px auto;
+}
+
+.form.closed {
+  max-height: 0%;
+  border: 0 transparent;
+  transition: 1.4s cubic-bezier(0, 1, 0, 1);
+}
+
+.name {
+  color: transparent;
+  background-image: 
+      linear-gradient(to right, var(--white) 50%,var(--dark-red) 50%),
+      linear-gradient(to right, var(--dark-red) 50%,var(--white) 50%);
+  transition: all 0.3s cubic-bezier(0.000, 0.000, 0.230, 1);
+  -webkit-background-clip: text, border-box;
+  background-clip: text, border-box; 
+  background-size: 200% 100%;
+  background-position: 100%;
+}
+
+.name:hover {
+  background-position: 0%;
 }

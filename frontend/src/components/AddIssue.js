@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const AddIssue = ({ onAdd }) => {
+const AddIssue = ({ onAdd, isAddOpen }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
@@ -22,7 +22,7 @@ const AddIssue = ({ onAdd }) => {
   }
 
   return (
-    <form className='form' onSubmit={onSubmit}>
+    <form className={isAddOpen ? 'form' : 'form closed'} onSubmit={onSubmit}>
       <div className='form-control'>
         <label>Title:</label>
         <input
